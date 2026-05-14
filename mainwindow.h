@@ -1,15 +1,15 @@
 #pragma once
 
-// Главное окно: два поля ввода, загрузка из файлов, вывод различий.
-
-#include "diff_engine.h"
+#include "diff_types.h"
 
 #include <QMainWindow>
 #include <QString>
 
+class CodeEditor;
 class QLabel;
-class QPlainTextEdit;
 class QPushButton;
+class QStackedWidget;
+class QTableWidget;
 
 class MainWindow final : public QMainWindow {
     Q_OBJECT
@@ -18,27 +18,33 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
 
 private slots:
-    void pickFileA();
-    void pickFileB();
+    void loadFileA();
+    void loadFileB();
     void runAnalysis();
+    void backToEditing();
 
 private:
     void updateSourceLabels();
-    // Собирает многострочный текст для нижнего поля: префиксы и номера строк.
-    static QString formatDiffOutput(const DiffResult &dr);
+    void setupScrollSync();
+    void applySideBySideDiff(const DiffResultLines &lines);
 
-    // Виджеты (имена без префикса m_: стиль textEditA, btnAnalyze, resultEdit …)
+    QStackedWidget *stackA{};
+    QStackedWidget *stackB{};
+    CodeEditor *codeEditA{};
+    CodeEditor *codeEditB{};
+    QTableWidget *diffTableA{};
+    QTableWidget *diffTableB{};
 
-    QPlainTextEdit *textEditA{};
-    QPlainTextEdit *textEditB{};
     QPushButton *btnLoadA{};
     QPushButton *btnLoadB{};
     QPushButton *btnAnalyze{};
+    QPushButton *btnBackToEdit{};
     QLabel *sourcesLabel{};
-    // Только чтение: сюда выводится результат сравнения после «Анализ».
-    QPlainTextEdit *resultEdit{};
+    QLabel *diffLegend{};
 
-    // Путь последнего успешного «Загрузить из файла» (для подписи); пусто = считаем ручной ввод.
+    QString savedPlainA;
+    QString savedPlainB;
+
     QString pathA;
     QString pathB;
 };
