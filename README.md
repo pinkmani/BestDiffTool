@@ -40,6 +40,3 @@ cmake --build build
 | `diff_text_delegate.cpp` / `diff_text_delegate.h` | Делегат ячейки таблицы для HTML-фрагмента |
 | `CMakeLists.txt` | Сборка CMake |
 
-## Лицензия
-
-Укажите лицензию по необходимости для курсовой/репозитория.
